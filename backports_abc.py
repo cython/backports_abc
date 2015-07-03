@@ -182,12 +182,3 @@ def patch(patch_inspect=True):
         _collections_abc.Coroutine
     except AttributeError:
         PATCHED['collections.abc.Coroutine'] = _collections_abc.Coroutine = mk_coroutine()
-
-    if patch_inspect:
-        try:
-            from inspect import iscoroutine
-        except ImportError:
-            def iscoroutine(obj):
-                return isinstance(obj, _collections_abc.Coroutine)
-            import inspect
-            PATCHED['inspect.iscoroutine'] = inspect.iscoroutine = iscoroutine

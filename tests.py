@@ -190,7 +190,6 @@ class TestOneTrickPonyABCs(ABCTestCase):
         for x in non_samples:
             self.assertNotIsInstance(x, Coroutine)
             self.assertFalse(issubclass(type(x), Coroutine), repr(type(x)))
-            self.assertFalse(inspect.iscoroutine(x))
 
         samples = [MinimalCoro()]
         for x in samples:
