@@ -1,14 +1,14 @@
 Changelog
 =========
 
-0.3
----
+0.3 (2015-07-03)
+----------------
 
 * removed patching of ``inspect.iscoroutine()`` as it is not ABC based
 
 
-0.2
----
+0.2 (2015-07-03)
+----------------
 
 * require explicit ``backports_abc.patch()`` call to do the patching
   (avoids side-effects on import and allows future configuration)
@@ -19,8 +19,8 @@ Changelog
   inspect.isawaitable()
 
 
-0.1
----
+0.1 (2015-06-24)
+----------------
 
 * initial public release
 
