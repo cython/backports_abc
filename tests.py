@@ -3,6 +3,7 @@ Test suite originally copied from test_collections.py in Python 3.5.
 """
 
 import backports_abc
+backports_abc.patch()
 
 try:
     from collections.abc import (

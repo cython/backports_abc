@@ -1,3 +1,13 @@
+"""
+Patch recently added ABCs into the standard lib module
+``collections.abc`` (Py3) or ``collections`` (Py2).
+
+Usage::
+
+    import backports_abc
+    backports_abc.patch()
+"""
+
 try:
     import collections.abc as _collections_abc
 except ImportError:
@@ -60,11 +70,6 @@ def mk_gen():
     Generator.register(generator)
     return Generator
 
-try:
-    Generator = _collections_abc.Generator
-except AttributeError:
-    Generator = _collections_abc.Generator = mk_gen()
-
 
 def mk_awaitable():
     from abc import abstractmethod, ABCMeta
@@ -92,25 +97,11 @@ def mk_awaitable():
 
     return Awaitable
 
-try:
-    Awaitable = _collections_abc.Awaitable
-except AttributeError:
-    Awaitable = _collections_abc.Awaitable = mk_awaitable()
-
-
-try:
-    from inspect import isawaitable
-except ImportError:
-    def isawaitable(obj):
-        return isinstance(obj, _collections_abc.Awaitable)
-    import inspect
-    inspect.isawaitable = isawaitable
-
 
 def mk_coroutine():
     from abc import abstractmethod, ABCMeta
 
-    class Coroutine(Awaitable):
+    class Coroutine(_collections_abc.Awaitable):
         __slots__ = ()
 
         @abstractmethod
@@ -158,16 +149,41 @@ def mk_coroutine():
 
     return Coroutine
 
-try:
-    Coroutine = _collections_abc.Coroutine
-except AttributeError:
-    Coroutine = _collections_abc.Coroutine = mk_coroutine()
 
+def patch(patch_inspect=True):
+    """
+    Main entry point: patch the ``collections.abc`` and ``inspect``
+    standard library modules.
+    """
 
-try:
-    from inspect import iscoroutine
-except ImportError:
-    def iscoroutine(obj):
-        return isinstance(obj, _collections_abc.Coroutine)
-    import inspect
-    inspect.iscoroutine = iscoroutine
+    try:
+        Generator = _collections_abc.Generator
+    except AttributeError:
+        Generator = _collections_abc.Generator = mk_gen()
+
+    try:
+        Awaitable = _collections_abc.Awaitable
+    except AttributeError:
+        Awaitable = _collections_abc.Awaitable = mk_awaitable()
+
+    try:
+        Coroutine = _collections_abc.Coroutine
+    except AttributeError:
+        Coroutine = _collections_abc.Coroutine = mk_coroutine()
+
+    if patch_inspect:
+        try:
+            from inspect import isawaitable
+        except ImportError:
+            def isawaitable(obj):
+                return isinstance(obj, _collections_abc.Awaitable)
+            import inspect
+            inspect.isawaitable = isawaitable
+
+        try:
+            from inspect import iscoroutine
+        except ImportError:
+            def iscoroutine(obj):
+                return isinstance(obj, _collections_abc.Coroutine)
+            import inspect
+            inspect.iscoroutine = iscoroutine
