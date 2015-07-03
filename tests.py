@@ -196,7 +196,6 @@ class TestOneTrickPonyABCs(ABCTestCase):
         for x in samples:
             self.assertIsInstance(x, Awaitable)
             self.assertTrue(issubclass(type(x), Awaitable))
-            self.assertTrue(inspect.iscoroutine(x))
 
         #c = coro()
         #self.assertIsInstance(c, Coroutine)
@@ -217,7 +216,6 @@ class TestOneTrickPonyABCs(ABCTestCase):
                 pass
         self.assertTrue(isinstance(CoroLike(), Coroutine))
         self.assertTrue(issubclass(CoroLike, Coroutine))
-        self.assertTrue(inspect.iscoroutine(CoroLike()))
 
         class CoroLike(object):
             def send(self, value):
