@@ -18,7 +18,6 @@ Currently provides the following names if missing:
 * ``collections.abc.Awaitable``
 * ``collections.abc.Coroutine``
 * ``inspect.isawaitable(obj)``
-* ``inspect.iscoroutine(obj)``
 
 In Python 2.x, it patches the ``collections`` module instead of the
 ``collections.abc`` module

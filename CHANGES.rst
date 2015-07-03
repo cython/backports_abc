@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.3
+---
+
+* removed patching of ``inspect.iscoroutine()`` as it is not ABC based
+
+
 0.2
 ---
 
