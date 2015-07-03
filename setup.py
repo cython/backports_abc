@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='backports_abc',
-    version="0.1",
+    version="0.2",
     url='https://github.com/cython/backports_abc',
     author='Stefan Behnel et al.',
     author_email='cython-devel@python.org',
