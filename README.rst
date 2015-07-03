@@ -24,4 +24,4 @@ In Python 2.x, it patches the ``collections`` module instead of the
 ``collections.abc`` module
 
 The names that were previously patched by ``patch()`` can be queried
-through mapping in ``backports_abc.PATCHED``.
+through the mapping in ``backports_abc.PATCHED``.
