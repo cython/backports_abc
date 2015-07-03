@@ -150,6 +150,9 @@ def mk_coroutine():
     return Coroutine
 
 
+PATCHED = {}
+
+
 def patch(patch_inspect=True):
     """
     Main entry point: patch the ``collections.abc`` and ``inspect``
@@ -157,19 +160,19 @@ def patch(patch_inspect=True):
     """
 
     try:
-        Generator = _collections_abc.Generator
+        _collections_abc.Generator
     except AttributeError:
-        Generator = _collections_abc.Generator = mk_gen()
+        PATCHED['collections.abc.Generator'] = _collections_abc.Generator = mk_gen()
 
     try:
-        Awaitable = _collections_abc.Awaitable
+        _collections_abc.Awaitable
     except AttributeError:
-        Awaitable = _collections_abc.Awaitable = mk_awaitable()
+        PATCHED['collections.abc.Awaitable'] = _collections_abc.Awaitable = mk_awaitable()
 
     try:
-        Coroutine = _collections_abc.Coroutine
+        _collections_abc.Coroutine
     except AttributeError:
-        Coroutine = _collections_abc.Coroutine = mk_coroutine()
+        PATCHED['collections.abc.Coroutine'] = _collections_abc.Coroutine = mk_coroutine()
 
     if patch_inspect:
         try:
@@ -178,7 +181,7 @@ def patch(patch_inspect=True):
             def isawaitable(obj):
                 return isinstance(obj, _collections_abc.Awaitable)
             import inspect
-            inspect.isawaitable = isawaitable
+            PATCHED['inspect.isawaitable'] = inspect.isawaitable = isawaitable
 
         try:
             from inspect import iscoroutine
@@ -186,4 +189,4 @@ def patch(patch_inspect=True):
             def iscoroutine(obj):
                 return isinstance(obj, _collections_abc.Coroutine)
             import inspect
-            inspect.iscoroutine = iscoroutine
+            PATCHED['inspect.iscoroutine'] = inspect.iscoroutine = iscoroutine
