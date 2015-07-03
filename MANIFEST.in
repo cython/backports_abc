@@ -1,2 +1,2 @@
 include *.py
-include MANIFEST.in
+include MANIFEST.in *.rst
