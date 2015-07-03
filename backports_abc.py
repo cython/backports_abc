@@ -98,6 +98,15 @@ except AttributeError:
     Awaitable = _collections_abc.Awaitable = mk_awaitable()
 
 
+try:
+    from inspect import isawaitable
+except ImportError:
+    def isawaitable(obj):
+        return isinstance(obj, _collections_abc.Awaitable)
+    import inspect
+    inspect.isawaitable = isawaitable
+
+
 def mk_coroutine():
     from abc import abstractmethod, ABCMeta
 
@@ -153,3 +162,12 @@ try:
     Coroutine = _collections_abc.Coroutine
 except AttributeError:
     Coroutine = _collections_abc.Coroutine = mk_coroutine()
+
+
+try:
+    from inspect import iscoroutine
+except ImportError:
+    def iscoroutine(obj):
+        return isinstance(obj, _collections_abc.Coroutine)
+    import inspect
+    inspect.iscoroutine = iscoroutine
