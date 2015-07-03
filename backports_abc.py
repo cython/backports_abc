@@ -169,11 +169,6 @@ def patch(patch_inspect=True):
     except AttributeError:
         PATCHED['collections.abc.Awaitable'] = _collections_abc.Awaitable = mk_awaitable()
 
-    try:
-        _collections_abc.Coroutine
-    except AttributeError:
-        PATCHED['collections.abc.Coroutine'] = _collections_abc.Coroutine = mk_coroutine()
-
     if patch_inspect:
         try:
             from inspect import isawaitable
@@ -183,6 +178,12 @@ def patch(patch_inspect=True):
             import inspect
             PATCHED['inspect.isawaitable'] = inspect.isawaitable = isawaitable
 
+    try:
+        _collections_abc.Coroutine
+    except AttributeError:
+        PATCHED['collections.abc.Coroutine'] = _collections_abc.Coroutine = mk_coroutine()
+
+    if patch_inspect:
         try:
             from inspect import iscoroutine
         except ImportError:
