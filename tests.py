@@ -12,6 +12,7 @@ except ImportError:
         Generator, Coroutine, Awaitable, Iterator, Iterable)
 
 import sys
+import inspect
 import unittest
 import operator
 from gc import collect as gc_collect
@@ -137,11 +138,13 @@ class TestOneTrickPonyABCs(ABCTestCase):
         for x in non_samples:
             self.assertNotIsInstance(x, Awaitable)
             self.assertFalse(issubclass(type(x), Awaitable), repr(type(x)))
+            self.assertFalse(inspect.isawaitable(x))
 
         samples = [Bar(), MinimalCoro()]
         for x in samples:
             self.assertIsInstance(x, Awaitable)
             self.assertTrue(issubclass(type(x), Awaitable))
+            self.assertTrue(inspect.isawaitable(x))
 
         #c = coro()
         #self.assertIsInstance(c, Awaitable)
@@ -153,6 +156,7 @@ class TestOneTrickPonyABCs(ABCTestCase):
 
         class CoroLike(object): pass
         Coroutine.register(CoroLike)
+        self.assertTrue(inspect.isawaitable(CoroLike()))
         self.assertTrue(isinstance(CoroLike(), Awaitable))
         self.assertTrue(issubclass(CoroLike, Awaitable))
         CoroLike = None
@@ -185,11 +189,13 @@ class TestOneTrickPonyABCs(ABCTestCase):
         for x in non_samples:
             self.assertNotIsInstance(x, Coroutine)
             self.assertFalse(issubclass(type(x), Coroutine), repr(type(x)))
+            self.assertFalse(inspect.iscoroutine(x))
 
         samples = [MinimalCoro()]
         for x in samples:
             self.assertIsInstance(x, Awaitable)
             self.assertTrue(issubclass(type(x), Awaitable))
+            self.assertTrue(inspect.iscoroutine(x))
 
         #c = coro()
         #self.assertIsInstance(c, Coroutine)
@@ -210,6 +216,7 @@ class TestOneTrickPonyABCs(ABCTestCase):
                 pass
         self.assertTrue(isinstance(CoroLike(), Coroutine))
         self.assertTrue(issubclass(CoroLike, Coroutine))
+        self.assertTrue(inspect.iscoroutine(CoroLike()))
 
         class CoroLike(object):
             def send(self, value):
