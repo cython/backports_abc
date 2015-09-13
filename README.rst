@@ -8,8 +8,10 @@ Usage::
     backports_abc.patch()
 
     try:
+        # ABCs live in "collections.abc" in Python >= 3.3
         from collections.abc import Coroutine, Generator
     except ImportError:
+        # fall back to import from "collections" in Python <= 3.2
         from collections import Coroutine, Generator
 
 Currently provides the following names if missing:
