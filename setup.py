@@ -1,6 +1,9 @@
 
 import io
-from distutils.core import setup
+try:
+    from setuptools import setup  # used mostly for wheel building
+except ImportError:
+    from distutils.core import setup
 
 
 with io.open('README.rst', encoding='utf8') as _f:
@@ -8,7 +11,7 @@ with io.open('README.rst', encoding='utf8') as _f:
 
 
 with io.open('CHANGES.rst', encoding='utf8') as _f:
-    long_description += '\n\n' + _f.read().strip() + '\n'
+    long_description += '\n\n%s\n' % _f.read().strip()
 
 
 setup(
