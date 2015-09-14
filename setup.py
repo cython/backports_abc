@@ -16,7 +16,7 @@ with io.open('CHANGES.rst', encoding='utf8') as _f:
 
 setup(
     name='backports_abc',
-    version="0.3",
+    version="0.4",
     url='https://github.com/cython/backports_abc',
     author='Stefan Behnel et al.',
     author_email='cython-devel@python.org',
