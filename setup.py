@@ -1,6 +1,6 @@
 
 import io
-from distutils.core import setup
+from setuptools import setup
 
 
 with io.open('README.rst', encoding='utf8') as _f:
