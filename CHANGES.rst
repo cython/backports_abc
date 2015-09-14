@@ -1,6 +1,14 @@
 Changelog
 =========
 
+0.4 (2015-09-14)
+----------------
+
+* direct wheel building support
+
+* make all names available at the module level instead of requiring patching
+
+
 0.3 (2015-07-03)
 ----------------
 

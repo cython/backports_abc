@@ -6,6 +6,13 @@ Usage::
 
     import backports_abc
     backports_abc.patch()
+
+or::
+
+    try:
+        from collections.abc import Generator
+    except ImportError:
+        from backports_abc import Generator
 """
 
 try:
@@ -99,9 +106,9 @@ def mk_awaitable():
 
 
 def mk_coroutine():
-    from abc import abstractmethod, ABCMeta
+    from abc import abstractmethod
 
-    class Coroutine(_collections_abc.Awaitable):
+    class Coroutine(Awaitable):
         __slots__ = ()
 
         @abstractmethod
@@ -150,35 +157,46 @@ def mk_coroutine():
     return Coroutine
 
 
+###
+#  make all ABCs available in this module
+
+try:
+    Generator = _collections_abc.Generator
+except AttributeError:
+    Generator = mk_gen()
+
+try:
+    Awaitable = _collections_abc.Awaitable
+except AttributeError:
+    Awaitable = mk_awaitable()
+
+try:
+    Coroutine = _collections_abc.Coroutine
+except AttributeError:
+    Coroutine = mk_coroutine()
+
+try:
+    from inspect import isawaitable
+except ImportError:
+    def isawaitable(obj):
+        return isinstance(obj, Awaitable)
+
+
+###
+#  allow patching the stdlib
+
 PATCHED = {}
 
 
 def patch(patch_inspect=True):
     """
-    Main entry point: patch the ``collections.abc`` and ``inspect``
+    Main entry point for patching the ``collections.abc`` and ``inspect``
     standard library modules.
     """
-
-    try:
-        _collections_abc.Generator
-    except AttributeError:
-        PATCHED['collections.abc.Generator'] = _collections_abc.Generator = mk_gen()
-
-    try:
-        _collections_abc.Awaitable
-    except AttributeError:
-        PATCHED['collections.abc.Awaitable'] = _collections_abc.Awaitable = mk_awaitable()
+    PATCHED['collections.abc.Generator'] = _collections_abc.Generator = Generator
+    PATCHED['collections.abc.Coroutine'] = _collections_abc.Coroutine = Coroutine
+    PATCHED['collections.abc.Awaitable'] = _collections_abc.Awaitable = Awaitable
 
     if patch_inspect:
-        try:
-            from inspect import isawaitable
-        except ImportError:
-            def isawaitable(obj):
-                return isinstance(obj, _collections_abc.Awaitable)
-            import inspect
-            PATCHED['inspect.isawaitable'] = inspect.isawaitable = isawaitable
-
-    try:
-        _collections_abc.Coroutine
-    except AttributeError:
-        PATCHED['collections.abc.Coroutine'] = _collections_abc.Coroutine = mk_coroutine()
+        import inspect
+        PATCHED['inspect.isawaitable'] = inspect.isawaitable = isawaitable

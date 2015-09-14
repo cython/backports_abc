@@ -3,6 +3,14 @@ Test suite originally copied from test_collections.py in Python 3.5.
 """
 
 import backports_abc
+
+FROM_MODULE = [
+    backports_abc.Generator,
+    backports_abc.Coroutine,
+    backports_abc.Awaitable,
+    backports_abc.isawaitable,
+]
+
 backports_abc.patch()
 
 try:
@@ -20,6 +28,16 @@ from gc import collect as gc_collect
 
 
 IS_PY3 = sys.version_info[0] >= 3
+
+
+class BackportsAbcTest(unittest.TestCase):
+
+    def validate_module_namespace(self):
+        self.assertEqual(FROM_MODULE[0], Generator)
+        self.assertEqual(FROM_MODULE[1], Coroutine)
+        self.assertEqual(FROM_MODULE[2], Awaitable)
+        self.assertEqual(FROM_MODULE[3], inspect.isawaitable)
+
 
 ################################################################################
 ### Abstract Base Classes
