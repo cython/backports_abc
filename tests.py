@@ -246,20 +246,28 @@ class TestOneTrickPonyABCs(ABCTestCase):
 
     def test_Iterable(self):
         # Check some non-iterables
-        non_samples = [None, 42, 3.14, 1j]
+        class OldStyleNonIterable: pass
+        non_samples = [None, 42, 3.14, 1j, OldStyleNonIterable()]
         for x in non_samples:
             self.assertNotIsInstance(x, Iterable)
-            self.assertFalse(issubclass(type(x), Iterable), repr(type(x)))
+            self.assertFalse(issubclass(x.__class__, Iterable),
+                             repr(x.__class__))
         # Check some iterables
+        class OldStyleIterableBase:
+            def __iter__(self):
+                yield None
+        class OldStyleIterable(OldStyleIterableBase): pass
         samples = [bytes(), str(),
                    tuple(), list(), set(), frozenset(), dict(),
                    dict().keys(), dict().items(), dict().values(),
                    (lambda: (yield))(),
                    (x for x in []),
+                   OldStyleIterable(),
                    ]
         for x in samples:
             self.assertIsInstance(x, Iterable)
-            self.assertTrue(issubclass(type(x), Iterable), repr(type(x)))
+            self.assertTrue(issubclass(x.__class__, Iterable),
+                            repr(x.__class__))
         # Check direct subclassing
         class I(Iterable):
             def __iter__(self):
