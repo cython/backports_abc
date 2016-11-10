@@ -63,7 +63,7 @@ def mk_gen():
         @classmethod
         def __subclasshook__(cls, C):
             if cls is Generator:
-                mro = C.__mro__
+                mro = getattr(C, '__mro__', [])
                 for method in required_methods:
                     for base in mro:
                         if method in base.__dict__:
@@ -88,7 +88,7 @@ def mk_awaitable():
     @classmethod
     def __subclasshook__(cls, C):
         if cls is Awaitable:
-            for B in C.__mro__:
+            for B in getattr(C, '__mro__', []):
                 if '__await__' in B.__dict__:
                     if B.__dict__['__await__']:
                         return True
@@ -144,7 +144,7 @@ def mk_coroutine():
         @classmethod
         def __subclasshook__(cls, C):
             if cls is Coroutine:
-                mro = C.__mro__
+                mro = getattr(C, '__mro__', [])
                 for method in ('__await__', 'send', 'throw', 'close'):
                     for base in mro:
                         if method in base.__dict__:
