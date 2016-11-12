@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.5 (2016-11-10)
+0.5 (2016-11-12)
 ----------------
 
 * support old-style (mro-missing) classes
