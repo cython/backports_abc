@@ -167,11 +167,11 @@ class TestOneTrickPonyABCs(ABCTestCase):
 
         #c = coro()
         #self.assertIsInstance(c, Awaitable)
-        #c.close() # awoid RuntimeWarning that coro() was not awaited
+        #c.close() # avoid RuntimeWarning that coro() was not awaited
 
         #c = new_coro()
         #self.assertIsInstance(c, Awaitable)
-        #c.close() # awoid RuntimeWarning that coro() was not awaited
+        #c.close() # avoid RuntimeWarning that coro() was not awaited
 
         class CoroLike(object): pass
         Coroutine.register(CoroLike)
@@ -216,11 +216,11 @@ class TestOneTrickPonyABCs(ABCTestCase):
 
         #c = coro()
         #self.assertIsInstance(c, Coroutine)
-        #c.close() # awoid RuntimeWarning that coro() was not awaited
+        #c.close() # avoid RuntimeWarning that coro() was not awaited
 
         #c = new_coro()
         #self.assertIsInstance(c, Coroutine)
-        #c.close() # awoid RuntimeWarning that coro() was not awaited
+        #c.close() # avoid RuntimeWarning that coro() was not awaited
 
         class CoroLike(object):
             def send(self, value):
